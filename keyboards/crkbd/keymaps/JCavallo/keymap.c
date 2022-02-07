@@ -27,40 +27,38 @@ enum custom_keycodes {
     COMPOSE_CIRC,
     COMPOSE_GRAVE,
     COMPOSE_DOUBLE_QUOTE,
+    COMPOSE_COMMA,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case COMPOSE_QUOTE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPS) SS_TAP(X_QUOTE));
-        } else {
-            // when keycode QMKBEST is released
+            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
         }
         break;
     case COMPOSE_CIRC:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPS));
+            SEND_STRING(SS_TAP(X_SLCK));
             tap_code16(KC_CIRC);
-        } else {
-            // when keycode QMKBEST is released
         }
         break;
     case COMPOSE_GRAVE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPS) SS_TAP(X_GRV));
-        } else {
-            // when keycode QMKBEST is released
+            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
         }
         break;
     case COMPOSE_DOUBLE_QUOTE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPS));
+            SEND_STRING(SS_TAP(X_SLCK));
             register_code(KC_LSFT);
             SEND_STRING(SS_TAP(X_QUOTE));
             unregister_code(KC_LSFT);
-        } else {
-            // when keycode QMKBEST is released
+        }
+        break;
+    case COMPOSE_COMMA:
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));
         }
         break;
     }
@@ -110,7 +108,7 @@ U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA
 
 // Left hand thumb middle
 #define NAVIGATION_LAYER \
-RESET,             COMPOSE_CIRC,      COMPOSE_GRAVE,     COMPOSE_QUOTE,     COMPOSE_DOUBLE_QUOTE,U_NA,            U_RDO,             U_PST,             U_CPY,             U_CUT,             U_UND,               U_NU, \
+RESET,             COMPOSE_CIRC,      COMPOSE_GRAVE,     COMPOSE_QUOTE,     COMPOSE_DOUBLE_QUOTE,COMPOSE_COMMA,   U_RDO,             U_PST,             U_CPY,             U_CUT,             U_UND,               U_NU, \
 U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,           KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
 U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              U_NU, \
                                                          U_NA,              U_NA,              U_NA,              KC_ENT,            KC_BSPC,           KC_DEL
