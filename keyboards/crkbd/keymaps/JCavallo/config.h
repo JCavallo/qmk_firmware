@@ -33,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_FORCE_HOLD
 #define TAPPING_TERM 150
 #define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_TERM_PER_KEY
 
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 
@@ -51,11 +52,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #undef MOUSEKEY_DELAY
 #define MOUSEKEY_DELAY          0
 #undef MOUSEKEY_INTERVAL
-#define MOUSEKEY_INTERVAL       10
+#define MOUSEKEY_INTERVAL       8
 #undef MOUSEKEY_WHEEL_DELAY
 #define MOUSEKEY_WHEEL_DELAY    0
 #undef MOUSEKEY_MAX_SPEED
-#define MOUSEKEY_MAX_SPEED      15
+#define MOUSEKEY_MAX_SPEED      10
 #undef MOUSEKEY_TIME_TO_MAX
 #define MOUSEKEY_TIME_TO_MAX    64
 
@@ -65,7 +66,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define U_CPY KC_COPY
 #define U_CUT KC_CUT
 #define U_UND KC_UNDO
-
-///////////////////////////////////////////////////////////////////////////////
-// Layers
-///////////////////////////////////////////////////////////////////////////////

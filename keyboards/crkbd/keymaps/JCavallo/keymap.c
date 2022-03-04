@@ -19,6 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
+enum layers {
+    ALPHA, NAV, MOUSE, MEDIA, NUM, SYM, FUN, GAME_ALPHA, GAME_NUM, GAME_FUN
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 // Macros
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,7 +34,7 @@ enum custom_keycodes {
     COMPOSE_COMMA,
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+void handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case COMPOSE_QUOTE:
         if (record->event.pressed) {
@@ -62,16 +66,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         break;
     }
-    return true;
 };
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(NAV, KC_SPC):
+            return 100;
+        default:
+            return TAPPING_TERM;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Layers
 ///////////////////////////////////////////////////////////////////////////////
-enum layers {
-    ALPHA, NAV, MOUSE, MEDIA, NUM, SYM, FUN, GAME_ALPHA, GAME_NUM, GAME_FUN
-};
-
 // Base => Colemak DH
 #define ALPHA_LAYER \
 U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             U_NU, \
@@ -122,10 +130,10 @@ U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA
 
 // Game mode, enabled by media + Right-hand top-most key
 #define GAME_ALPHA_LAYER \
-U_NU,              KC_TAB,            KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,                KC_P, \
-U_NU,              KC_LSFT,           KC_A,              KC_S,              KC_D,              KC_F,              KC_G,              KC_H,              KC_J,              KC_K,              KC_L,                KC_M, \
-U_NU,              KC_LCTL,           KC_Z,              KC_X,              KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           KC_DOT,              U_NU, \
-                                                         LT(GAME_FUN, KC_ESC),KC_SPC,          LT(GAME_NUM, KC_TAB),KC_ENT,          KC_BSPC,           KC_DEL
+KC_T,              KC_TAB,            KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,                KC_P, \
+KC_G,              KC_LSFT,           KC_A,              KC_S,              KC_D,              KC_F,              KC_G,              KC_H,              KC_J,              KC_K,              KC_L,                KC_M, \
+KC_B,              KC_LCTL,           KC_Z,              KC_X,              KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           KC_DOT,              U_NU, \
+                                                         LT(GAME_FUN, KC_ESC),KC_SPC,          LT(GAME_NUM, KC_TAB),KC_ENT,          KC_BSPC,           LALT_T(KC_DEL)
 
 // Game mode, Numbers
 #define GAME_NUMBER_LAYER \
@@ -161,7 +169,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Oled screen
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   if (!is_keyboard_master()) {
     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
@@ -169,29 +176,24 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   return rotation;
 }
 
-#define L_BASE 0
-#define L_LOWER 2
-#define L_RAISE 4
-#define L_ADJUST 8
-
 void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state) {
-        case L_BASE:
-            oled_write_ln_P(PSTR("Default"), false);
-            break;
-        case L_LOWER:
-            oled_write_ln_P(PSTR("Lower"), false);
-            break;
-        case L_RAISE:
-            oled_write_ln_P(PSTR("Raise"), false);
-            break;
-        case L_ADJUST:
-        case L_ADJUST|L_LOWER:
-        case L_ADJUST|L_RAISE:
-        case L_ADJUST|L_LOWER|L_RAISE:
-            oled_write_ln_P(PSTR("Adjust"), false);
-            break;
+    if (layer_state_is(GAME_ALPHA) || layer_state_is(GAME_NUM) || layer_state_is(GAME_FUN)) {
+        oled_write_ln_P(PSTR("GAMING"), false);
+    } else if (layer_state_is(NAV)) {
+        oled_write_ln_P(PSTR("Navigation"), false);
+    } else if (layer_state_is(MOUSE)) {
+        oled_write_ln_P(PSTR("Mouse"), false);
+    } else if (layer_state_is(MEDIA)) {
+        oled_write_ln_P(PSTR("Media"), false);
+    } else if (layer_state_is(NUM)) {
+        oled_write_ln_P(PSTR("Numbers"), false);
+    } else if (layer_state_is(SYM)) {
+        oled_write_ln_P(PSTR("Symbols"), false);
+    } else if (layer_state_is(FUN)) {
+        oled_write_ln_P(PSTR("Fn keys"), false);
+    } else {
+        oled_write_ln_P(PSTR("Alpha"), false);
     }
 }
 
@@ -248,19 +250,22 @@ void oled_render_logo(void) {
     oled_write_P(crkbd_logo, false);
 }
 
-void oled_task_user(void) {
+bool oled_task_user(void) {
     if (is_keyboard_master()) {
         oled_render_layer_state();
         oled_render_keylog();
     } else {
         oled_render_logo();
     }
+    return true;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  handle_compose_macros(keycode, record);
+#ifdef OLED_ENABLE
   if (record->event.pressed) {
     set_keylog(keycode, record);
   }
+#endif // OLED_ENABLE
   return true;
 }
-#endif // OLED_ENABLE
