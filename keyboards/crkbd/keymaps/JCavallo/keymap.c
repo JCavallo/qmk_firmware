@@ -71,7 +71,7 @@ void handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LT(NAV, KC_SPC):
-            return 100;
+            return 120;
         default:
             return TAPPING_TERM;
     }
