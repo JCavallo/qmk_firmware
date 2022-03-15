@@ -104,7 +104,7 @@ U_NU,              KC_GRV,            KC_1,              KC_2,              KC_3
 #define FUNCTION_LAYER \
 U_NU,              KC_F12,            KC_F7,             KC_F8,             KC_F9,             KC_PSCR,           U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
 U_NU,              KC_F11,            KC_F4,             KC_F5,             KC_F6,             KC_SLCK,           U_NA,              KC_LSFT,           KC_LCTL,           KC_LALT,           KC_LGUI,             U_NU, \
-U_NU,              KC_F10,            KC_F1,             KC_F2,             KC_F3,             KC_PAUS,           U_NA,              U_NA,              U_NA,              KC_ALGR,           U_NA,                U_NU, \
+U_NU,              KC_F10,            KC_F1,             KC_F2,             KC_F3,             KC_PAUS,           U_NA,              U_NA,              U_NA,              KC_ALGR,           U_NA,                TG(NAV), \
                                                          KC_APP,            KC_SPC,            KC_TAB,            U_NA,              U_NA,              U_NA
 
 // Left hand thumb left
@@ -118,7 +118,7 @@ U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA
 #define NAVIGATION_LAYER \
 RESET,             COMPOSE_CIRC,      COMPOSE_GRAVE,     COMPOSE_QUOTE,     COMPOSE_DOUBLE_QUOTE,COMPOSE_COMMA,   U_RDO,             U_PST,             U_CPY,             U_CUT,             U_UND,               U_NU, \
 U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,           KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
-U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              U_NU, \
+U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              TG(NAV), \
                                                          U_NA,              U_NA,              U_NA,              KC_ENT,            KC_BSPC,           KC_DEL
 
 // Left hand thumb right
