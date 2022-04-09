@@ -34,22 +34,25 @@ enum custom_keycodes {
     COMPOSE_COMMA,
 };
 
-void handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
+bool handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case COMPOSE_QUOTE:
-        if (record->event.pressed) {
+    case LSFT_T(COMPOSE_QUOTE):
+        if (record->tap.count && record->event.pressed) {
             SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
+            return false;
         }
         break;
-    case COMPOSE_CIRC:
-        if (record->event.pressed) {
+    case LALT_T(COMPOSE_CIRC):
+        if (record->tap.count && record->event.pressed) {
             SEND_STRING(SS_TAP(X_SLCK));
             tap_code16(KC_CIRC);
+            return false;
         }
         break;
-    case COMPOSE_GRAVE:
-        if (record->event.pressed) {
+    case LCTL_T(COMPOSE_GRAVE):
+        if (record->tap.count && record->event.pressed) {
             SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
+            return false;
         }
         break;
     case COMPOSE_DOUBLE_QUOTE:
@@ -60,12 +63,14 @@ void handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
             unregister_code(KC_LSFT);
         }
         break;
-    case COMPOSE_COMMA:
-        if (record->event.pressed) {
+    case LGUI_T(COMPOSE_COMMA):
+        if (record->tap.count && record->event.pressed) {
             SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));
+            return false;
         }
         break;
     }
+    return true;
 };
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -116,8 +121,8 @@ U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA
 
 // Left hand thumb middle
 #define NAVIGATION_LAYER \
-RESET,             COMPOSE_CIRC,      COMPOSE_GRAVE,     COMPOSE_QUOTE,     COMPOSE_DOUBLE_QUOTE,COMPOSE_COMMA,   U_RDO,             U_PST,             U_CPY,             U_CUT,             U_UND,               U_NU, \
-U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,           KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
+RESET,             U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_RDO,             U_PST,             U_CPY,             U_CUT,             U_UND,               U_NU, \
+U_NU,   LGUI_T(COMPOSE_COMMA),LALT_T(COMPOSE_CIRC),LCTL_T(COMPOSE_GRAVE),LSFT_T(COMPOSE_QUOTE),COMPOSE_DOUBLE_QUOTE, KC_CAPS,        KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
 U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              TG(NAV), \
                                                          U_NA,              U_NA,              U_NA,              KC_ENT,            KC_BSPC,           KC_DEL
 
@@ -261,11 +266,12 @@ bool oled_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  handle_compose_macros(keycode, record);
+  bool res = true;
+  res = handle_compose_macros(keycode, record);
 #ifdef OLED_ENABLE
   if (record->event.pressed) {
     set_keylog(keycode, record);
   }
 #endif // OLED_ENABLE
-  return true;
+  return res;
 }
