@@ -24,63 +24,124 @@ enum layers {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// Combos for frequently used compose
+///////////////////////////////////////////////////////////////////////////////
+enum combo_events {
+  COMBO_COMPOSE_QUOTE,
+  COMBO_COMPOSE_GRAVE,
+  COMBO_COMPOSE_CIRC,
+  COMBO_COMPOSE_COMMA,
+  COMBO_COMPOSE_DOUBLE_QUOTE,
+  COMBO_LENGTH
+};
+uint16_t COMBO_LEN = COMBO_LENGTH;
+
+const uint16_t PROGMEM compose_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), COMBO_END};
+const uint16_t PROGMEM compose_grave[] = {LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM compose_circ[] = {LALT_T(KC_R), LSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM compose_comma[] = {LALT_T(KC_I), LCTL_T(KC_E), COMBO_END};
+const uint16_t PROGMEM compose_double_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
+
+combo_t key_combos[] = {
+  [COMBO_COMPOSE_QUOTE] = COMBO_ACTION(compose_quote),
+  [COMBO_COMPOSE_GRAVE] = COMBO_ACTION(compose_grave),
+  [COMBO_COMPOSE_CIRC] = COMBO_ACTION(compose_circ),
+  [COMBO_COMPOSE_COMMA] = COMBO_ACTION(compose_comma),
+  [COMBO_COMPOSE_DOUBLE_QUOTE] = COMBO_ACTION(compose_double_quote),
+};
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+  switch(combo_index) {
+    case COMBO_COMPOSE_QUOTE:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
+      }
+      break;
+    case COMBO_COMPOSE_GRAVE:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
+      }
+      break;
+    case COMBO_COMPOSE_CIRC:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_SLCK));
+        tap_code16(KC_CIRC);
+      }
+      break;
+    case COMBO_COMPOSE_COMMA:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));
+      }
+      break;
+    case COMBO_COMPOSE_DOUBLE_QUOTE:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_SLCK));
+        register_code(KC_LSFT);
+        SEND_STRING(SS_TAP(X_QUOTE));
+        unregister_code(KC_LSFT);
+      }
+      break;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // Macros
 ///////////////////////////////////////////////////////////////////////////////
-enum custom_keycodes {
-    COMPOSE_QUOTE = SAFE_RANGE,
-    COMPOSE_CIRC,
-    COMPOSE_GRAVE,
-    COMPOSE_DOUBLE_QUOTE,
-    COMPOSE_COMMA,
-};
+/*enum custom_keycodes {*/
+/*    COMPOSE_QUOTE = SAFE_RANGE,*/
+/*    COMPOSE_CIRC,*/
+/*    COMPOSE_GRAVE,*/
+/*    COMPOSE_DOUBLE_QUOTE,*/
+/*    COMPOSE_COMMA,*/
+/*};*/
 
-bool handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case LSFT_T(COMPOSE_QUOTE):
-        if (record->tap.count && record->event.pressed) {
-            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
-            return false;
-        }
-        break;
-    case LALT_T(COMPOSE_CIRC):
-        if (record->tap.count && record->event.pressed) {
-            SEND_STRING(SS_TAP(X_SLCK));
-            tap_code16(KC_CIRC);
-            return false;
-        }
-        break;
-    case LCTL_T(COMPOSE_GRAVE):
-        if (record->tap.count && record->event.pressed) {
-            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
-            return false;
-        }
-        break;
-    case COMPOSE_DOUBLE_QUOTE:
-        if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_SLCK));
-            register_code(KC_LSFT);
-            SEND_STRING(SS_TAP(X_QUOTE));
-            unregister_code(KC_LSFT);
-        }
-        break;
-    case LGUI_T(COMPOSE_COMMA):
-        if (record->tap.count && record->event.pressed) {
-            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));
-            return false;
-        }
-        break;
-    }
-    return true;
-};
+/*bool handle_compose_macros(uint16_t keycode, keyrecord_t *record) {*/
+/*    switch (keycode) {*/
+/*    case LSFT_T(COMPOSE_QUOTE):*/
+/*        if (record->tap.count && record->event.pressed) {*/
+/*            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));*/
+/*            return false;*/
+/*        }*/
+/*        break;*/
+/*    case LALT_T(COMPOSE_CIRC):*/
+/*        if (record->tap.count && record->event.pressed) {*/
+/*            SEND_STRING(SS_TAP(X_SLCK));*/
+/*            tap_code16(KC_CIRC);*/
+/*            return false;*/
+/*        }*/
+/*        break;*/
+/*    case LCTL_T(COMPOSE_GRAVE):*/
+/*        if (record->tap.count && record->event.pressed) {*/
+/*            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));*/
+/*            return false;*/
+/*        }*/
+/*        break;*/
+/*    case COMPOSE_DOUBLE_QUOTE:*/
+/*        if (record->event.pressed) {*/
+/*            SEND_STRING(SS_TAP(X_SLCK));*/
+/*            register_code(KC_LSFT);*/
+/*            SEND_STRING(SS_TAP(X_QUOTE));*/
+/*            unregister_code(KC_LSFT);*/
+/*        }*/
+/*        break;*/
+/*    case LGUI_T(COMPOSE_COMMA):*/
+/*        if (record->tap.count && record->event.pressed) {*/
+/*            SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));*/
+/*            return false;*/
+/*        }*/
+/*        break;*/
+/*    }*/
+/*    return true;*/
+/*};*/
 
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case LT(NAV, KC_SPC):
-            return 120;
-        default:
-            return TAPPING_TERM;
-    }
-}
+/*uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {*/
+/*    switch (keycode) {*/
+/*        case LT(NAV, KC_SPC):*/
+/*            return 120;*/
+/*        default:*/
+/*            return TAPPING_TERM;*/
+/*    }*/
+/*}*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // Layers
@@ -122,7 +183,7 @@ U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA
 // Left hand thumb middle
 #define NAVIGATION_LAYER \
 RESET,             U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_RDO,             U_PST,             U_CPY,             U_CUT,             U_UND,               U_NU, \
-U_NU,   LGUI_T(COMPOSE_COMMA),LALT_T(COMPOSE_CIRC),LCTL_T(COMPOSE_GRAVE),LSFT_T(COMPOSE_QUOTE),COMPOSE_DOUBLE_QUOTE, KC_CAPS,        KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
+U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,        KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
 U_NU,              U_NA,              KC_ALGR,           U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              TG(NAV), \
                                                          U_NA,              U_NA,              U_NA,              KC_ENT,            KC_BSPC,           KC_DEL
 
@@ -203,75 +264,60 @@ void oled_render_layer_state(void) {
 }
 
 
-char keylog_str[24] = {};
+/*char keylog_str[24] = {};*/
 
-const char code_to_name[60] = {
-    ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
-    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-    'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
-    '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
+/*const char code_to_name[60] = {*/
+/*    ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',*/
+/*    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',*/
+/*    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',*/
+/*    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',*/
+/*    'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',*/
+/*    '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};*/
 
-void set_keylog(uint16_t keycode, keyrecord_t *record) {
-  char name = ' ';
-    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
-  if (keycode < 60) {
-    name = code_to_name[keycode];
-  }
+/*void set_keylog(uint16_t keycode, keyrecord_t *record) {*/
+/*  char name = ' ';*/
+/*    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||*/
+/*        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }*/
+/*  if (keycode < 60) {*/
+/*    name = code_to_name[keycode];*/
+/*  }*/
 
-  // update keylog
-  snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",
-           record->event.key.row, record->event.key.col,
-           keycode, name);
-}
+/*  // update keylog*/
+/*  snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",*/
+/*           record->event.key.row, record->event.key.col,*/
+/*           keycode, name);*/
+/*}*/
 
-void oled_render_keylog(void) {
-    oled_write(keylog_str, false);
-}
+/*void oled_render_keylog(void) {*/
+/*    oled_write(keylog_str, false);*/
+/*}*/
 
-void render_bootmagic_status(bool status) {
-    /* Show Ctrl-Gui Swap options */
-    static const char PROGMEM logo[][2][3] = {
-        {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
-        {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
-    };
-    if (status) {
-        oled_write_ln_P(logo[0][0], false);
-        oled_write_ln_P(logo[0][1], false);
-    } else {
-        oled_write_ln_P(logo[1][0], false);
-        oled_write_ln_P(logo[1][1], false);
-    }
-}
-
-void oled_render_logo(void) {
-    static const char PROGMEM crkbd_logo[] = {
-        0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90, 0x91, 0x92, 0x93, 0x94,
-        0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,
-        0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4,
-        0};
-    oled_write_P(crkbd_logo, false);
-}
+/*void oled_render_logo(void) {*/
+/*    static const char PROGMEM crkbd_logo[] = {*/
+/*        0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90, 0x91, 0x92, 0x93, 0x94,*/
+/*        0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,*/
+/*        0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4,*/
+/*        0};*/
+/*    oled_write_P(crkbd_logo, false);*/
+/*}*/
 
 bool oled_task_user(void) {
     if (is_keyboard_master()) {
         oled_render_layer_state();
-        oled_render_keylog();
-    } else {
-        oled_render_logo();
+        /*oled_render_keylog();*/
+    /*} else {*/
+    /*    oled_render_logo();*/
     }
     return true;
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  bool res = true;
-  res = handle_compose_macros(keycode, record);
-#ifdef OLED_ENABLE
-  if (record->event.pressed) {
-    set_keylog(keycode, record);
-  }
-#endif // OLED_ENABLE
-  return res;
-}
+/*bool process_record_user(uint16_t keycode, keyrecord_t *record) {*/
+/*  [>bool res = true;<]*/
+/*  [>res = handle_compose_macros(keycode, record);<]*/
+/*#ifdef OLED_ENABLE*/
+/*  if (record->event.pressed) {*/
+/*    set_keylog(keycode, record);*/
+/*  }*/
+/*#endif // OLED_ENABLE*/
+/*  return true;*/
+/*}*/
