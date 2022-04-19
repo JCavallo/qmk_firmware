@@ -29,6 +29,7 @@ enum layers {
 enum combo_events {
   COMBO_COMPOSE_QUOTE,
   COMBO_COMPOSE_GRAVE,
+  COMBO_COMPOSE_GRAVE_RIGHT,
   COMBO_COMPOSE_CIRC,
   COMBO_COMPOSE_COMMA,
   COMBO_COMPOSE_DOUBLE_QUOTE,
@@ -38,6 +39,7 @@ uint16_t COMBO_LEN = COMBO_LENGTH;
 
 const uint16_t PROGMEM compose_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), COMBO_END};
 const uint16_t PROGMEM compose_grave[] = {LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM compose_grave_right[] = {LSFT_T(KC_N), LCTL_T(KC_E), COMBO_END};
 const uint16_t PROGMEM compose_circ[] = {LALT_T(KC_R), LSFT_T(KC_T), COMBO_END};
 const uint16_t PROGMEM compose_comma[] = {LALT_T(KC_I), LCTL_T(KC_E), COMBO_END};
 const uint16_t PROGMEM compose_double_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
@@ -45,6 +47,7 @@ const uint16_t PROGMEM compose_double_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), LSF
 combo_t key_combos[] = {
   [COMBO_COMPOSE_QUOTE] = COMBO_ACTION(compose_quote),
   [COMBO_COMPOSE_GRAVE] = COMBO_ACTION(compose_grave),
+  [COMBO_COMPOSE_GRAVE_RIGHT] = COMBO_ACTION(compose_grave_right),
   [COMBO_COMPOSE_CIRC] = COMBO_ACTION(compose_circ),
   [COMBO_COMPOSE_COMMA] = COMBO_ACTION(compose_comma),
   [COMBO_COMPOSE_DOUBLE_QUOTE] = COMBO_ACTION(compose_double_quote),
@@ -58,6 +61,7 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
       }
       break;
     case COMBO_COMPOSE_GRAVE:
+    case COMBO_COMPOSE_GRAVE_RIGHT:
       if (pressed) {
         SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
       }
