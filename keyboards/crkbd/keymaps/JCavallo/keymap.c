@@ -19,6 +19,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
+///////////////////////////////////////////////////////////////////////////////
+// Usage for Colemak + French + Dev
+///////////////////////////////////////////////////////////////////////////////
+
+/*
+
+General idea is to use ScrollLock as a compose key, because, French.
+Accents are triggered through combos on the left hand.
+On Windows, we need to use a custom kb layout because dead keys are enabled in
+the default us-intl layout, which messes things up a bit.
+
+On Linux, in xinitrc:
+
+- `xmodmap -e "keycode 78 = Multi_key"`
+- `setxkbmap -layout us -variant altgr-intl`
+
+(to switch back to fr layout, use `setxkbmap -layout fr -variant latin9`)
+
+On Windows:
+
+- Install Wincompose: http://wincompose.info/
+- Configure it to use the ScrollLock key
+- Download and install https://www.microsoft.com/en-us/download/confirmation.aspx?id=102134
+- Load this kb: https://raw.githubusercontent.com/umanovskis/win-kbd-usint-nodead/master/us_international_no_dead_keys.klc#fromHistory
+
+*/
+
+///////////////////////////////////////////////////////////////////////////////
+// Layer List
+///////////////////////////////////////////////////////////////////////////////
+
 enum layers {
     ALPHA, NAV, MOUSE, MEDIA, NUM, SYM, FUN, GAME_ALPHA, GAME_NUM, GAME_FUN
 };
