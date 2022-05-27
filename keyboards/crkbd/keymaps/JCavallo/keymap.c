@@ -59,6 +59,7 @@ enum layers {
 ///////////////////////////////////////////////////////////////////////////////
 enum combo_events {
   COMBO_COMPOSE_QUOTE,
+  COMBO_COMPOSE_E_QUOTE,
   COMBO_COMPOSE_GRAVE,
   COMBO_COMPOSE_GRAVE_RIGHT,
   COMBO_COMPOSE_CIRC,
@@ -69,6 +70,7 @@ enum combo_events {
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
 const uint16_t PROGMEM compose_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), COMBO_END};
+const uint16_t PROGMEM compose_e_quote[] = {LSFT_T(KC_N), LCTL_T(KC_E), LALT_T(KC_I), COMBO_END};
 const uint16_t PROGMEM compose_grave[] = {LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
 const uint16_t PROGMEM compose_grave_right[] = {LSFT_T(KC_N), LCTL_T(KC_E), COMBO_END};
 const uint16_t PROGMEM compose_circ[] = {LALT_T(KC_R), LSFT_T(KC_T), COMBO_END};
@@ -77,6 +79,7 @@ const uint16_t PROGMEM compose_double_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), LSF
 
 combo_t key_combos[] = {
   [COMBO_COMPOSE_QUOTE] = COMBO_ACTION(compose_quote),
+  [COMBO_COMPOSE_E_QUOTE] = COMBO_ACTION(compose_e_quote),
   [COMBO_COMPOSE_GRAVE] = COMBO_ACTION(compose_grave),
   [COMBO_COMPOSE_GRAVE_RIGHT] = COMBO_ACTION(compose_grave_right),
   [COMBO_COMPOSE_CIRC] = COMBO_ACTION(compose_circ),
@@ -89,6 +92,11 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
     case COMBO_COMPOSE_QUOTE:
       if (pressed) {
         SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
+      }
+      break;
+    case COMBO_COMPOSE_E_QUOTE:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE) "e");
       }
       break;
     case COMBO_COMPOSE_GRAVE:
@@ -116,6 +124,36 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         unregister_code(KC_LSFT);
       }
       break;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Leader
+///////////////////////////////////////////////////////////////////////////////
+
+LEADER_EXTERNS();
+
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    SEQ_ONE_KEY(KC_W) {
+      // Anything you can do in a macro.
+      SEND_STRING(":w" SS_TAP(X_ENT));
+    }
+    /*SEQ_TWO_KEYS(KC_D, KC_D) {*/
+    /*  SEND_STRING(SS_LCTL("a") SS_LCTL("c"));*/
+    /*}*/
+    /*SEQ_THREE_KEYS(KC_D, KC_D, KC_S) {*/
+    /*  SEND_STRING("https://start.duckduckgo.com\n");*/
+    /*}*/
+    /*SEQ_TWO_KEYS(KC_A, KC_S) {*/
+    /*  register_code(KC_LGUI);*/
+    /*  register_code(KC_S);*/
+    /*  unregister_code(KC_S);*/
+    /*  unregister_code(KC_LGUI);*/
+    /*}*/
   }
 }
 
@@ -183,7 +221,7 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 ///////////////////////////////////////////////////////////////////////////////
 // Base => Colemak DH
 #define ALPHA_LAYER \
-U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             U_NU, \
+U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             KC_LEAD, \
 U_NU,              LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,              KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),        U_NU, \
 U_NU,              KC_Z,              ALGR_T(KC_X),      KC_C,              KC_D,              KC_V,              KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,             U_NU, \
                                                          LT(MEDIA, KC_ESC), LT(NAV, KC_SPC),   LT(MOUSE, KC_TAB), LT(SYM, KC_ENT),   LT(NUM, KC_BSPC),  LT(FUN, KC_DEL)
