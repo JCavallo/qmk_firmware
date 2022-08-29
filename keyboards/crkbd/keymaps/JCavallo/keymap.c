@@ -207,14 +207,27 @@ void matrix_scan_user(void) {
 /*    return true;*/
 /*};*/
 
-/*uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {*/
-/*    switch (keycode) {*/
-/*        case LT(NAV, KC_SPC):*/
-/*            return 120;*/
-/*        default:*/
-/*            return TAPPING_TERM;*/
-/*    }*/
-/*}*/
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_T):
+            return TAPPING_TERM - 20;
+        case LSFT_T(KC_N):
+            return TAPPING_TERM - 20;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
+/* bool get_ignore_mod_tap_interrupt(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_T):
+            return false;
+        case LSFT_T(KC_N):
+            return false;
+        default:
+            return true;
+    }
+} */
 
 ///////////////////////////////////////////////////////////////////////////////
 // Layers
