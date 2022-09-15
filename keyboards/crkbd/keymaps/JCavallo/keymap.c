@@ -65,6 +65,9 @@ enum combo_events {
   COMBO_COMPOSE_CIRC,
   COMBO_COMPOSE_COMMA,
   COMBO_COMPOSE_DOUBLE_QUOTE,
+  COMBO_UNDERSCORE,
+  COMBO_DASH,
+  COMBO_CAPS_WORD,
   COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
@@ -76,6 +79,9 @@ const uint16_t PROGMEM compose_grave_right[] = {LSFT_T(KC_N), LCTL_T(KC_E), COMB
 const uint16_t PROGMEM compose_circ[] = {LALT_T(KC_R), LSFT_T(KC_T), COMBO_END};
 const uint16_t PROGMEM compose_comma[] = {LALT_T(KC_I), LCTL_T(KC_E), COMBO_END};
 const uint16_t PROGMEM compose_double_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
+const uint16_t PROGMEM underscore[] = {LSFT_T(KC_T), LSFT_T(KC_N), COMBO_END};
+const uint16_t PROGMEM dash[] = {LCTL_T(KC_S), LCTL_T(KC_E), COMBO_END};
+const uint16_t PROGMEM caps_word[] = {LALT_T(KC_R), LALT_T(KC_I), COMBO_END};
 
 combo_t key_combos[] = {
   [COMBO_COMPOSE_QUOTE] = COMBO_ACTION(compose_quote),
@@ -85,6 +91,9 @@ combo_t key_combos[] = {
   [COMBO_COMPOSE_CIRC] = COMBO_ACTION(compose_circ),
   [COMBO_COMPOSE_COMMA] = COMBO_ACTION(compose_comma),
   [COMBO_COMPOSE_DOUBLE_QUOTE] = COMBO_ACTION(compose_double_quote),
+  [COMBO_UNDERSCORE] = COMBO_ACTION(underscore),
+  [COMBO_DASH] = COMBO_ACTION(dash),
+  [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -122,6 +131,21 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
         register_code(KC_LSFT);
         SEND_STRING(SS_TAP(X_QUOTE));
         unregister_code(KC_LSFT);
+      }
+      break;
+    case COMBO_UNDERSCORE:
+      if (pressed) {
+        SEND_STRING("_");
+      }
+      break;
+    case COMBO_DASH:
+      if (pressed) {
+        SEND_STRING("-");
+      }
+      break;
+    case COMBO_CAPS_WORD:
+      if (pressed) {
+        caps_word_on();
       }
       break;
   }
