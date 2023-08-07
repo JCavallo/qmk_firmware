@@ -63,6 +63,7 @@ enum combo_events {
   COMBO_RCTL,
   COMBO_LCTL,
   COMBO_BCKSPC,
+  COMBO_FAST_BCKSPC,
   COMBO_UNDERSCORE,
   COMBO_DASH,
   COMBO_CAPS_WORD,
@@ -75,6 +76,7 @@ const uint16_t PROGMEM compose_lshift[] = {KC_R, KC_S, COMBO_END};
 const uint16_t PROGMEM compose_rctl[] = {KC_N, KC_E, COMBO_END};
 const uint16_t PROGMEM compose_lctl[] = {KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM compose_bckspc[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM compose_fast_bckspc[] = {KC_QUOT, KC_Y, COMBO_END};
 const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
 const uint16_t PROGMEM dash[] = {KC_S, KC_E, COMBO_END};
 const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
@@ -85,6 +87,7 @@ combo_t key_combos[] = {
   [COMBO_RCTL] = COMBO(compose_rctl, KC_LCTL),
   [COMBO_LCTL] = COMBO(compose_lctl, KC_LCTL),
   [COMBO_BCKSPC] = COMBO(compose_bckspc, KC_BSPC),
+  [COMBO_FAST_BCKSPC] = COMBO(compose_fast_bckspc, RCTL(KC_BSPC)),
   [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
   [COMBO_DASH] = COMBO(dash, KC_MINS),
   [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
@@ -92,37 +95,44 @@ combo_t key_combos[] = {
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
   switch(combo_index) {
-    case COMBO_RSHIFT:
-    case COMBO_LSHIFT:
-      if (pressed) {
-        register_code(KC_LSFT);
-      } else {
-        unregister_code(KC_LSFT);
-      }
-      break;
-    case COMBO_RCTL:
-    case COMBO_LCTL:
-      if (pressed) {
-        register_code(KC_LCTL);
-      } else {
-        unregister_code(KC_LCTL);
-      }
-      break;
-    case COMBO_BCKSPC:
-      if (pressed) {
-        SEND_STRING(SS_TAP(X_BSPC));
-      }
-      break;
-    case COMBO_UNDERSCORE:
-      if (pressed) {
-        SEND_STRING("_");
-      }
-      break;
-    case COMBO_DASH:
-      if (pressed) {
-        SEND_STRING("-");
-      }
-      break;
+    // case COMBO_RSHIFT:
+    // case COMBO_LSHIFT:
+    //   if (pressed) {
+    //     register_code(KC_LSFT);
+    //   } else {
+    //     unregister_code(KC_LSFT);
+    //   }
+    //   break;
+    // case COMBO_RCTL:
+    // case COMBO_LCTL:
+    //   if (pressed) {
+    //     register_code(KC_LCTL);
+    //   } else {
+    //     unregister_code(KC_LCTL);
+    //   }
+    //   break;
+    // case COMBO_BCKSPC:
+    //   if (pressed) {
+    //     SEND_STRING(SS_TAP(X_BSPC));
+    //   }
+    //   break;
+    // case COMBO_FAST_BCKSPC:
+    //   if (pressed) {
+    //     register_code(KC_RCTL);
+    //     SEND_STRING(SS_TAP(X_BSPC));
+    //     unregister_code(KC_RCTL);
+    //   }
+    //   break;
+    // case COMBO_UNDERSCORE:
+    //   if (pressed) {
+    //     SEND_STRING("_");
+    //   }
+    //   break;
+    // case COMBO_DASH:
+    //   if (pressed) {
+    //     SEND_STRING("-");
+    //   }
+    //   break;
     case COMBO_CAPS_WORD:
       if (pressed) {
         caps_word_on();
@@ -349,7 +359,7 @@ U_NU,              LGUI_T(KC_Z),      LALT_T(KC_X),      LCTL_T(KC_C),      LSFT
 #define SYMBOL_LAYER \
 U_NU,              U_NA,              KC_AMPR,           KC_ASTR,           U_NA,              KC_PLUS,           KC_BSLS,           U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
 U_NU,              KC_SCLN,           KC_LCBR,           KC_LBRC,           KC_LPRN,           KC_UNDS,           KC_MINS,           KC_RPRN,           KC_RBRC,           KC_RCBR,           KC_COLN,             U_NU, \
-U_NU,              KC_TILD,           KC_EXLM,           KC_AT,             KC_HASH,           KC_EQL,            KC_PIPE,           KC_CIRC,           KC_PERC,           KC_DLR,            KC_TILD,             U_NU, \
+U_NU,              KC_GRV,            KC_EXLM,           KC_AT,             KC_HASH,           KC_EQL,            KC_PIPE,           KC_CIRC,           KC_PERC,           KC_DLR,            KC_TILD,             U_NU, \
                                                          U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              U_NA
 
 // Right hand thumb middle
