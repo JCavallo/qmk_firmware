@@ -51,20 +51,18 @@ On Windows:
 ///////////////////////////////////////////////////////////////////////////////
 
 enum layers {
-    ALPHA, NAV, MOUSE, MEDIA, NUM, SYM, FUN, GAME_ALPHA, GAME_NUM, GAME_FUN
+    ALPHA, NAV, ACCENT, NUM, SYM, FUN,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // Combos for frequently used compose
 ///////////////////////////////////////////////////////////////////////////////
 enum combo_events {
-  COMBO_COMPOSE_QUOTE,
-  COMBO_COMPOSE_E_QUOTE,
-  COMBO_COMPOSE_GRAVE,
-  COMBO_COMPOSE_GRAVE_RIGHT,
-  COMBO_COMPOSE_CIRC,
-  COMBO_COMPOSE_COMMA,
-  COMBO_COMPOSE_DOUBLE_QUOTE,
+  COMBO_RSHIFT,
+  COMBO_LSHIFT,
+  COMBO_RCTL,
+  COMBO_LCTL,
+  COMBO_BCKSPC,
   COMBO_UNDERSCORE,
   COMBO_DASH,
   COMBO_CAPS_WORD,
@@ -72,65 +70,47 @@ enum combo_events {
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
-const uint16_t PROGMEM compose_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), COMBO_END};
-const uint16_t PROGMEM compose_e_quote[] = {LSFT_T(KC_N), LCTL_T(KC_E), LALT_T(KC_I), COMBO_END};
-const uint16_t PROGMEM compose_grave[] = {LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
-const uint16_t PROGMEM compose_grave_right[] = {LSFT_T(KC_N), LCTL_T(KC_E), COMBO_END};
-const uint16_t PROGMEM compose_circ[] = {LALT_T(KC_R), LSFT_T(KC_T), COMBO_END};
-const uint16_t PROGMEM compose_comma[] = {LALT_T(KC_I), LCTL_T(KC_E), COMBO_END};
-const uint16_t PROGMEM compose_double_quote[] = {LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), COMBO_END};
-const uint16_t PROGMEM underscore[] = {LSFT_T(KC_T), LSFT_T(KC_N), COMBO_END};
-const uint16_t PROGMEM dash[] = {LCTL_T(KC_S), LCTL_T(KC_E), COMBO_END};
-const uint16_t PROGMEM caps_word[] = {LALT_T(KC_R), LALT_T(KC_I), COMBO_END};
+const uint16_t PROGMEM compose_rshift[] = {KC_I, KC_E, COMBO_END};
+const uint16_t PROGMEM compose_lshift[] = {KC_R, KC_S, COMBO_END};
+const uint16_t PROGMEM compose_rctl[] = {KC_N, KC_E, COMBO_END};
+const uint16_t PROGMEM compose_lctl[] = {KC_T, KC_S, COMBO_END};
+const uint16_t PROGMEM compose_bckspc[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM dash[] = {KC_S, KC_E, COMBO_END};
+const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
 
 combo_t key_combos[] = {
-  [COMBO_COMPOSE_QUOTE] = COMBO_ACTION(compose_quote),
-  [COMBO_COMPOSE_E_QUOTE] = COMBO_ACTION(compose_e_quote),
-  [COMBO_COMPOSE_GRAVE] = COMBO_ACTION(compose_grave),
-  [COMBO_COMPOSE_GRAVE_RIGHT] = COMBO_ACTION(compose_grave_right),
-  [COMBO_COMPOSE_CIRC] = COMBO_ACTION(compose_circ),
-  [COMBO_COMPOSE_COMMA] = COMBO_ACTION(compose_comma),
-  [COMBO_COMPOSE_DOUBLE_QUOTE] = COMBO_ACTION(compose_double_quote),
-  [COMBO_UNDERSCORE] = COMBO_ACTION(underscore),
-  [COMBO_DASH] = COMBO_ACTION(dash),
+  [COMBO_RSHIFT] = COMBO(compose_rshift, KC_LSFT),
+  [COMBO_LSHIFT] = COMBO(compose_lshift, KC_LSFT),
+  [COMBO_RCTL] = COMBO(compose_rctl, KC_LCTL),
+  [COMBO_LCTL] = COMBO(compose_lctl, KC_LCTL),
+  [COMBO_BCKSPC] = COMBO(compose_bckspc, KC_BSPC),
+  [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
+  [COMBO_DASH] = COMBO(dash, KC_MINS),
   [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
   switch(combo_index) {
-    case COMBO_COMPOSE_QUOTE:
+    case COMBO_RSHIFT:
+    case COMBO_LSHIFT:
       if (pressed) {
-        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
-      }
-      break;
-    case COMBO_COMPOSE_E_QUOTE:
-      if (pressed) {
-        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE) "e");
-      }
-      break;
-    case COMBO_COMPOSE_GRAVE:
-    case COMBO_COMPOSE_GRAVE_RIGHT:
-      if (pressed) {
-        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
-      }
-      break;
-    case COMBO_COMPOSE_CIRC:
-      if (pressed) {
-        SEND_STRING(SS_TAP(X_SLCK));
-        tap_code16(KC_CIRC);
-      }
-      break;
-    case COMBO_COMPOSE_COMMA:
-      if (pressed) {
-        SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));
-      }
-      break;
-    case COMBO_COMPOSE_DOUBLE_QUOTE:
-      if (pressed) {
-        SEND_STRING(SS_TAP(X_SLCK));
         register_code(KC_LSFT);
-        SEND_STRING(SS_TAP(X_QUOTE));
+      } else {
         unregister_code(KC_LSFT);
+      }
+      break;
+    case COMBO_RCTL:
+    case COMBO_LCTL:
+      if (pressed) {
+        register_code(KC_LCTL);
+      } else {
+        unregister_code(KC_LCTL);
+      }
+      break;
+    case COMBO_BCKSPC:
+      if (pressed) {
+        SEND_STRING(SS_TAP(X_BSPC));
       }
       break;
     case COMBO_UNDERSCORE:
@@ -202,134 +182,130 @@ enum custom_keycodes {
     COMPOSE_O_TREMA,
 };
 
-void _quote() {
+void quote(void) {
     SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_QUOTE));
 }
 
-void _circ() {
+void circ(void) {
     SEND_STRING(SS_TAP(X_SLCK));
     tap_code16(KC_CIRC);
 }
 
-void _grave() {
+void grave(void) {
     SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_GRV));
 }
 
-void _trema() {
+void trema(void) {
     SEND_STRING(SS_TAP(X_SLCK));
     register_code(KC_LSFT);
     SEND_STRING(SS_TAP(X_QUOTE));
     unregister_code(KC_LSFT);
 }
 
-void _cedille() {
+void cedille(void) {
     SEND_STRING(SS_TAP(X_SLCK) SS_TAP(X_COMM));
 }
 
 bool handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case COMPOSE_QUOTE:
-        if (record->tap.count && record->event.pressed) {
-            _quote();
+        if (record->event.pressed) {
+            quote();
             return false;
         }
         break;
     case COMPOSE_CIRC:
-        if (record->tap.count && record->event.pressed) {
-            _circ();
+        if (record->event.pressed) {
+            circ();
             return false;
         }
         break;
     case COMPOSE_GRAVE:
-        if (record->tap.count && record->event.pressed) {
-            _grave();
+        if (record->event.pressed) {
+            grave();
             return false;
         }
         break;
     case COMPOSE_TREMA:
         if (record->event.pressed) {
-            _trema();
+            trema();
             return false;
         }
         break;
     case COMPOSE_A_GRAVE:
-        if (record->tap.count && record->event.pressed) {
-            _grave();
-            SEND_STRING(SS_TAP(KC_A));
+        if (record->event.pressed) {
+            grave();
+            SEND_STRING("a");
             return false;
         }
         break;
     case COMPOSE_CAPS_A_GRAVE:
-        if (record->tap.count && record->event.pressed) {
-            _grave();
-            register_code(KC_LSFT);
-            SEND_STRING(SS_TAP(KC_A));
-            unregister_code(KC_LSFT);
+        if (record->event.pressed) {
+            grave();
+            SEND_STRING("A");
             return false;
         }
         break;
     case COMPOSE_C_CEDILLE:
-        if (record->tap.count && record->event.pressed) {
-            _cedille();
-            SEND_STRING(SS_TAP(KC_C));
+        if (record->event.pressed) {
+            cedille();
+            SEND_STRING("c");
             return false;
         }
         break;
     case COMPOSE_CAPS_C_CEDILLE:
-        if (record->tap.count && record->event.pressed) {
-            _cedille();
-            register_code(KC_LSFT);
-            SEND_STRING(SS_TAP(KC_C));
-            unregister_code(KC_LSFT);
+        if (record->event.pressed) {
+            cedille();
+            SEND_STRING("C");
             return false;
         }
         break;
     case COMPOSE_E_QUOTE:
-        if (record->tap.count && record->event.pressed) {
-            _quote();
-            SEND_STRING(SS_TAP(KC_E));
+        if (record->event.pressed) {
+            quote();
+            SEND_STRING("e");
             return false;
         }
         break;
     case COMPOSE_E_GRAVE:
-        if (record->tap.count && record->event.pressed) {
-            _grave();
-            SEND_STRING(SS_TAP(KC_E));
+        if (record->event.pressed) {
+            grave();
+            SEND_STRING("e");
             return false;
         }
         break;
     case COMPOSE_E_CIRC:
-        if (record->tap.count && record->event.pressed) {
-            _circ();
-            SEND_STRING(SS_TAP(KC_E));
+        if (record->event.pressed) {
+            circ();
+            SEND_STRING("e");
             return false;
         }
         break;
     case COMPOSE_U_GRAVE:
-        if (record->tap.count && record->event.pressed) {
-            _grave();
-            SEND_STRING(SS_TAP(KC_U));
+        if (record->event.pressed) {
+            grave();
+            SEND_STRING("u");
             return false;
         }
         break;
     case COMPOSE_U_TREMA:
-        if (record->tap.count && record->event.pressed) {
-            _trema();
-            SEND_STRING(SS_TAP(KC_U));
+        if (record->event.pressed) {
+            trema();
+            SEND_STRING("u");
             return false;
         }
         break;
     case COMPOSE_I_TREMA:
-        if (record->tap.count && record->event.pressed) {
-            _trema();
-            SEND_STRING(SS_TAP(KC_I));
+        if (record->event.pressed) {
+            trema();
+            SEND_STRING("i");
             return false;
         }
         break;
     case COMPOSE_O_TREMA:
-        if (record->tap.count && record->event.pressed) {
-            _trema();
-            SEND_STRING(SS_TAP(KC_O));
+        if (record->event.pressed) {
+            trema();
+            SEND_STRING("o");
             return false;
         }
         break;
@@ -366,21 +342,21 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 // Base => Colemak DH
 #define ALPHA_LAYER \
 U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             KC_LEAD, \
-KC_ESC,            KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              LSFT_T(KC_N),      KC_E,              KC_I,              KC_O,                U_NU, \
+KC_ESC,            KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                U_NU, \
 U_NU,              LGUI_T(KC_Z),      LALT_T(KC_X),      LCTL_T(KC_C),      LSFT_T(KC_D),      KC_V,              KC_K,              LSFT_T(KC_H),      LCTL_T(KC_COMM),   LALT_T(KC_DOT),    LGUI_T(KC_SLSH),     KC_MUTE_MIC, \
-                                                         OSL(ACCENT),       KC_SPC,            LT(NAVIGATION, KC_TAB), LT(FUNCTION, KC_ENT), LT(NUM, KC_BSPC), OSL(SYMBOL)
+                                                         OSL(ACCENT),       KC_SPC,            LT(NAV, KC_TAB),   LT(FUN, KC_ENT),   LT(NUM, KC_BSPC),  OSL(SYM)
 // Right hand thumb left
 #define SYMBOL_LAYER \
-U_NU,              KC_LCBR,           KC_AMPR,           KC_ASTR,           KC_LPRN,           KC_RCBR,           U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
-U_NU,              KC_COLN,           KC_DLR,            KC_PERC,           KC_CIRC,           KC_PLUS,           U_NA,              KC_LSFT,           KC_LCTL,           KC_LALT,           KC_LGUI,             U_NU, \
-U_NU,              KC_TILD,           KC_EXLM,           KC_AT,             KC_HASH,           KC_PIPE,           U_NA,              U_NA,              U_NA,              U_NU,              U_NA,                U_NU, \
-                                                         KC_LPRN,           KC_RPRN,           KC_UNDS,           U_NA,              U_NA,              U_NA
+U_NU,              U_NA,              KC_AMPR,           KC_ASTR,           U_NA,              KC_PLUS,           KC_BSLS,           U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
+U_NU,              KC_SCLN,           KC_LCBR,           KC_LBRC,           KC_LPRN,           KC_UNDS,           KC_MINS,           KC_RPRN,           KC_RBRC,           KC_RCBR,           KC_COLN,             U_NU, \
+U_NU,              KC_TILD,           KC_EXLM,           KC_AT,             KC_HASH,           KC_EQL,            KC_PIPE,           KC_CIRC,           KC_PERC,           KC_DLR,            KC_TILD,             U_NU, \
+                                                         U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              U_NA
 
 // Right hand thumb middle
 #define NUMBER_LAYER \
 U_NU,              KC_LBRC,           KC_4,              KC_5,              KC_6,              KC_PLUS,           U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
 U_NU,              KC_0,              KC_1,              KC_2,              KC_3,              KC_DOT,            U_NA,              KC_LSFT,           KC_LCTL,           KC_LALT,           KC_LGUI,             U_NU, \
-U_NU,              KC_COMM,           KC_7,              KC_8,              KC_9,              KC_EQU,            U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                U_NU, \
+U_NU,              KC_COMM,           KC_7,              KC_8,              KC_9,              KC_EQL,            U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                U_NU, \
                                                          U_NU,              U_NU,              U_NU,              U_NA,              U_NA,              U_NA
 
 // Right hand thumb right
@@ -392,10 +368,10 @@ U_NU,              KC_F10,            KC_F7,             KC_F8,             KC_F
 
 // Left hand thumb left
 #define ACCENT_LAYER \
-U_NU,              COMPOSE_CAPS_A_GRAVE, LCTL(KC_C),     LCTL(KC_V),        LCTL(LSFT(KC_C),  LCTL(LSFT(KC_V),    U_NU,              U_NU,              COMPOSE_U_GRAVE,   COMPOSE_U_TREMA,   U_NU,                U_NU, \
-U_NU,              COMPOSE_A_GRAVE,   COMPOSE_QUOTE,     COMPOSE_GRAVE,     COMPOSE_CIRC,     COMPOSE_TREMA,      U_NU,              COMPOSE_E_GRAVE,   COMPOSE_E_QUOTE,   COMPOSE_I_TREMA,   COMPOSE_O_TRMEA,     U_NU, \
+U_NU,              COMPOSE_CAPS_A_GRAVE, LCTL(KC_C),     LCTL(KC_V),        LCTL(LSFT(KC_C)), LCTL(LSFT(KC_V)),   U_NU,              U_NU,              COMPOSE_U_GRAVE,   COMPOSE_U_TREMA,   U_NU,                U_NU, \
+U_NU,              COMPOSE_A_GRAVE,   COMPOSE_QUOTE,     COMPOSE_GRAVE,     COMPOSE_CIRC,     COMPOSE_TREMA,      U_NU,              COMPOSE_E_GRAVE,   COMPOSE_E_QUOTE,   COMPOSE_I_TREMA,   COMPOSE_O_TREMA,     U_NU, \
 U_NU,              U_NU,              U_NU,              COMPOSE_C_CEDILLE, COMPOSE_CAPS_C_CEDILLE, U_NU,         U_NU,              U_NU,              COMPOSE_E_CIRC,    U_NU,              U_NU,                U_NU, \
-                                                         U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              KC_SCLK
+                                                         U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              KC_SLCK
 
 // Left hand thumb middle
 #define NAVIGATION_LAYER \
@@ -404,13 +380,13 @@ U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_L
 U_NU,              U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              U_NU, \
                                                          U_NA,              U_NA,              U_NA,              U_NU,              U_NU,              U_NU
 
-// Game mode, enabled by media + Right-hand top-most key
+/*// Game mode, enabled by media + Right-hand top-most key
 // #define GAME_ALPHA_LAYER \
 // KC_T,              KC_TAB,            KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,                KC_P, \
 // KC_G,              KC_LSFT,           KC_A,              KC_S,              KC_D,              KC_F,              KC_G,              KC_H,              KC_J,              KC_K,              KC_L,                KC_M, \
 // KC_B,              KC_LCTL,           KC_Z,              KC_X,              KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           KC_DOT,              U_NU, \
 //                                                          LT(GAME_FUN, KC_ESC),KC_SPC,          LT(GAME_NUM, KC_TAB),KC_ENT,          KC_BSPC,           LALT_T(KC_DEL)
-
+*/
 ///////////////////////////////////////////////////////////////////////////////
 // Actually apply layers
 ///////////////////////////////////////////////////////////////////////////////
@@ -504,12 +480,10 @@ bool oled_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  bool res = true;
-  res = handle_compose_macros(keycode, record);
 /*#ifdef OLED_ENABLE*/
 /*  if (record->event.pressed) {*/
 /*    set_keylog(keycode, record);*/
 /*  }*/
 /*#endif // OLED_ENABLE*/
-  return true;
+  return handle_compose_macros(keycode, record);
 }
