@@ -67,6 +67,7 @@ enum combo_events {
   COMBO_UNDERSCORE,
   COMBO_DASH,
   COMBO_CAPS_WORD,
+  COMBO_ESCAPE,
   COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
@@ -77,8 +78,9 @@ const uint16_t PROGMEM compose_rctl[] = {KC_N, KC_E, COMBO_END};
 const uint16_t PROGMEM compose_lctl[] = {KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM compose_bckspc[] = {KC_U, KC_Y, COMBO_END};
 const uint16_t PROGMEM compose_fast_bckspc[] = {KC_QUOT, KC_Y, COMBO_END};
-const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
-const uint16_t PROGMEM dash[] = {KC_S, KC_E, COMBO_END};
+const uint16_t PROGMEM underscore[] = {KC_E, KC_S, COMBO_END};
+const uint16_t PROGMEM dash[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM escape[] = {KC_R, KC_I, COMBO_END};
 const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
 
 combo_t key_combos[] = {
@@ -90,6 +92,7 @@ combo_t key_combos[] = {
   [COMBO_FAST_BCKSPC] = COMBO(compose_fast_bckspc, RCTL(KC_BSPC)),
   [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
   [COMBO_DASH] = COMBO(dash, KC_MINS),
+  [COMBO_ESCAPE] = COMBO(escape, KC_ESC),
   [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
 };
 
@@ -187,9 +190,9 @@ enum custom_keycodes {
     COMPOSE_E_GRAVE,
     COMPOSE_E_CIRC,
     COMPOSE_U_GRAVE,
-    COMPOSE_U_TREMA,
-    COMPOSE_I_TREMA,
-    COMPOSE_O_TREMA,
+    COMPOSE_U_CIRC,
+    COMPOSE_I_CIRC,
+    COMPOSE_O_CIRC,
 };
 
 void quote(void) {
@@ -298,23 +301,23 @@ bool handle_compose_macros(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
         break;
-    case COMPOSE_U_TREMA:
+    case COMPOSE_U_CIRC:
         if (record->event.pressed) {
-            trema();
+            circ();
             SEND_STRING("u");
             return false;
         }
         break;
-    case COMPOSE_I_TREMA:
+    case COMPOSE_I_CIRC:
         if (record->event.pressed) {
-            trema();
+            circ();
             SEND_STRING("i");
             return false;
         }
         break;
-    case COMPOSE_O_TREMA:
+    case COMPOSE_O_CIRC:
         if (record->event.pressed) {
-            trema();
+            circ();
             SEND_STRING("o");
             return false;
         }
@@ -352,13 +355,13 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 // Base => Colemak DH
 #define ALPHA_LAYER \
 U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             KC_LEAD, \
-KC_ESC,            KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                U_NU, \
+/*KC_ESC*/U_NU,            KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                U_NU, \
 U_NU,              LGUI_T(KC_Z),      LALT_T(KC_X),      LCTL_T(KC_C),      LSFT_T(KC_D),      KC_V,              KC_K,              LSFT_T(KC_H),      LCTL_T(KC_COMM),   LALT_T(KC_DOT),    LGUI_T(KC_SLSH),     KC_MUTE_MIC, \
                                                          OSL(ACCENT),       KC_SPC,            LT(NAV, KC_TAB),   LT(FUN, KC_ENT),   LT(NUM, KC_BSPC),  OSL(SYM)
 // Right hand thumb left
 #define SYMBOL_LAYER \
 U_NU,              U_NA,              KC_AMPR,           KC_ASTR,           U_NA,              KC_PLUS,           KC_BSLS,           U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
-U_NU,              KC_SCLN,           KC_LCBR,           KC_LBRC,           KC_LPRN,           KC_UNDS,           KC_MINS,           KC_RPRN,           KC_RBRC,           KC_RCBR,           KC_COLN,             U_NU, \
+U_NU,              KC_SCLN,           KC_LCBR,           KC_LBRC,           KC_LPRN,           /*KC_UNDS*/U_NU,           /*KC_MINS*/U_NU,           KC_RPRN,           KC_RBRC,           KC_RCBR,           KC_COLN,             U_NU, \
 U_NU,              KC_GRV,            KC_EXLM,           KC_AT,             KC_HASH,           KC_EQL,            KC_PIPE,           KC_CIRC,           KC_PERC,           KC_DLR,            KC_TILD,             U_NU, \
                                                          U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              U_NA
 
@@ -378,8 +381,8 @@ U_NU,              KC_F10,            KC_F7,             KC_F8,             KC_F
 
 // Left hand thumb left
 #define ACCENT_LAYER \
-U_NU,              COMPOSE_CAPS_A_GRAVE, LCTL(KC_C),     LCTL(KC_V),        LCTL(LSFT(KC_C)), LCTL(LSFT(KC_V)),   U_NU,              U_NU,              COMPOSE_U_GRAVE,   COMPOSE_U_TREMA,   U_NU,                U_NU, \
-U_NU,              COMPOSE_A_GRAVE,   COMPOSE_QUOTE,     COMPOSE_GRAVE,     COMPOSE_CIRC,     COMPOSE_TREMA,      U_NU,              COMPOSE_E_GRAVE,   COMPOSE_E_QUOTE,   COMPOSE_I_TREMA,   COMPOSE_O_TREMA,     U_NU, \
+U_NU,              COMPOSE_CAPS_A_GRAVE, LCTL(KC_C),     LCTL(KC_V),        LCTL(LSFT(KC_C)), LCTL(LSFT(KC_V)),   U_NU,              U_NU,              COMPOSE_U_GRAVE,   COMPOSE_U_CIRC,   U_NU,                U_NU, \
+U_NU,              COMPOSE_A_GRAVE,   COMPOSE_QUOTE,     COMPOSE_GRAVE,     COMPOSE_CIRC,     COMPOSE_TREMA,      U_NU,              COMPOSE_E_GRAVE,   COMPOSE_E_QUOTE,   COMPOSE_I_CIRC,   COMPOSE_O_CIRC,     U_NU, \
 U_NU,              U_NU,              U_NU,              COMPOSE_C_CEDILLE, COMPOSE_CAPS_C_CEDILLE, U_NU,         U_NU,              U_NU,              COMPOSE_E_CIRC,    U_NU,              U_NU,                U_NU, \
                                                          U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              KC_SLCK
 
@@ -388,7 +391,7 @@ U_NU,              U_NU,              U_NU,              COMPOSE_C_CEDILLE, COMP
 RESET,             U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_RDO,             KC_MUTE,           KC_VOLD,           KC_VOLU,           U_NU,                U_NU, \
 U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,           KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
 U_NU,              U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              U_NU, \
-                                                         U_NA,              U_NA,              U_NA,              U_NU,              U_NU,              U_NU
+                                                         U_NA,              U_NA,              U_NA,              U_NU,              KC_DEL,              U_NU
 
 /*// Game mode, enabled by media + Right-hand top-most key
 // #define GAME_ALPHA_LAYER \
