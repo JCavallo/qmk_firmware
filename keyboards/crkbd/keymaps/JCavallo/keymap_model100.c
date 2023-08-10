@@ -55,99 +55,6 @@ enum layers {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Combos for frequently used compose
-///////////////////////////////////////////////////////////////////////////////
-enum combo_events {
-  COMBO_RSHIFT,
-  COMBO_LSHIFT,
-  COMBO_RCTL,
-  COMBO_LCTL,
-  COMBO_BCKSPC,
-  COMBO_FAST_BCKSPC,
-  COMBO_UNDERSCORE,
-  COMBO_DASH,
-  COMBO_BACKTICK,
-  COMBO_CAPS_WORD,
-  COMBO_ESCAPE,
-  COMBO_LENGTH
-};
-uint16_t COMBO_LEN = COMBO_LENGTH;
-
-const uint16_t PROGMEM compose_rshift[] = {KC_N, KC_E, COMBO_END};
-const uint16_t PROGMEM compose_lshift[] = {KC_T, KC_S, COMBO_END};
-const uint16_t PROGMEM compose_rctl[] = {KC_I, KC_E, COMBO_END};
-const uint16_t PROGMEM compose_lctl[] = {KC_R, KC_S, COMBO_END};
-const uint16_t PROGMEM compose_bckspc[] = {KC_U, KC_Y, COMBO_END};
-const uint16_t PROGMEM compose_fast_bckspc[] = {KC_QUOT, KC_Y, COMBO_END};
-const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
-const uint16_t PROGMEM dash[] = {KC_E, KC_S, COMBO_END};
-const uint16_t PROGMEM escape[] = {KC_R, KC_I, COMBO_END};
-const uint16_t PROGMEM backtick[] = {KC_A, KC_O, COMBO_END};
-const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
-
-combo_t key_combos[] = {
-  [COMBO_RSHIFT] = COMBO(compose_rshift, KC_LSFT),
-  [COMBO_LSHIFT] = COMBO(compose_lshift, KC_LSFT),
-  [COMBO_RCTL] = COMBO(compose_rctl, KC_LCTL),
-  [COMBO_LCTL] = COMBO(compose_lctl, KC_LCTL),
-  [COMBO_BCKSPC] = COMBO(compose_bckspc, KC_BSPC),
-  [COMBO_FAST_BCKSPC] = COMBO(compose_fast_bckspc, RCTL(KC_BSPC)),
-  [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
-  [COMBO_DASH] = COMBO(dash, KC_MINS),
-  [COMBO_BACKTICK] = COMBO(backtick, KC_GRV),
-  [COMBO_ESCAPE] = COMBO(escape, KC_ESC),
-  [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
-};
-
-void process_combo_event(uint16_t combo_index, bool pressed) {
-  switch(combo_index) {
-    // case COMBO_RSHIFT:
-    // case COMBO_LSHIFT:
-    //   if (pressed) {
-    //     register_code(KC_LSFT);
-    //   } else {
-    //     unregister_code(KC_LSFT);
-    //   }
-    //   break;
-    // case COMBO_RCTL:
-    // case COMBO_LCTL:
-    //   if (pressed) {
-    //     register_code(KC_LCTL);
-    //   } else {
-    //     unregister_code(KC_LCTL);
-    //   }
-    //   break;
-    // case COMBO_BCKSPC:
-    //   if (pressed) {
-    //     SEND_STRING(SS_TAP(X_BSPC));
-    //   }
-    //   break;
-    // case COMBO_FAST_BCKSPC:
-    //   if (pressed) {
-    //     register_code(KC_RCTL);
-    //     SEND_STRING(SS_TAP(X_BSPC));
-    //     unregister_code(KC_RCTL);
-    //   }
-    //   break;
-    // case COMBO_UNDERSCORE:
-    //   if (pressed) {
-    //     SEND_STRING("_");
-    //   }
-    //   break;
-    // case COMBO_DASH:
-    //   if (pressed) {
-    //     SEND_STRING("-");
-    //   }
-    //   break;
-    case COMBO_CAPS_WORD:
-      if (pressed) {
-        caps_word_on();
-      }
-      break;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Leader
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -350,6 +257,102 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return true;
     }
 } */
+
+///////////////////////////////////////////////////////////////////////////////
+// Combos for frequently used compose
+///////////////////////////////////////////////////////////////////////////////
+enum combo_events {
+  COMBO_RSHIFT,
+  COMBO_LSHIFT,
+  COMBO_RCTL,
+  COMBO_LCTL,
+  COMBO_BCKSPC,
+  COMBO_FAST_BCKSPC,
+  COMBO_UNDERSCORE,
+  COMBO_DASH,
+  COMBO_BACKTICK,
+  COMBO_CAPS_WORD,
+  COMBO_ESCAPE,
+  COMBO_COMPOSE_E_ACUTE,
+  COMBO_LENGTH
+};
+uint16_t COMBO_LEN = COMBO_LENGTH;
+
+const uint16_t PROGMEM combo_rshift[] = {KC_N, KC_E, COMBO_END};
+const uint16_t PROGMEM combo_lshift[] = {KC_T, KC_S, COMBO_END};
+const uint16_t PROGMEM combo_rctl[] = {KC_I, KC_E, COMBO_END};
+const uint16_t PROGMEM combo_lctl[] = {KC_R, KC_S, COMBO_END};
+const uint16_t PROGMEM combo_bckspc[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM combo_fast_bckspc[] = {KC_QUOT, KC_Y, COMBO_END};
+const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM dash[] = {KC_E, KC_S, COMBO_END};
+const uint16_t PROGMEM escape[] = {KC_R, KC_I, COMBO_END};
+const uint16_t PROGMEM backtick[] = {KC_A, KC_O, COMBO_END};
+const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
+const uint16_t PROGMEM compose_e_acute[] = {KC_N, KC_I, COMBO_END};
+
+combo_t key_combos[] = {
+  [COMBO_RSHIFT] = COMBO(combo_rshift, KC_LSFT),
+  [COMBO_LSHIFT] = COMBO(combo_lshift, KC_LSFT),
+  [COMBO_RCTL] = COMBO(combo_rctl, KC_LCTL),
+  [COMBO_LCTL] = COMBO(combo_lctl, KC_LCTL),
+  [COMBO_BCKSPC] = COMBO(combo_bckspc, KC_BSPC),
+  [COMBO_FAST_BCKSPC] = COMBO(combo_fast_bckspc, RCTL(KC_BSPC)),
+  [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
+  [COMBO_DASH] = COMBO(dash, KC_MINS),
+  [COMBO_BACKTICK] = COMBO(backtick, KC_GRV),
+  [COMBO_ESCAPE] = COMBO(escape, KC_ESC),
+  [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
+  [COMBO_COMPOSE_E_ACUTE] = COMBO(compose_e_acute, COMPOSE_E_QUOTE),
+};
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+  switch(combo_index) {
+    // case COMBO_RSHIFT:
+    // case COMBO_LSHIFT:
+    //   if (pressed) {
+    //     register_code(KC_LSFT);
+    //   } else {
+    //     unregister_code(KC_LSFT);
+    //   }
+    //   break;
+    // case COMBO_RCTL:
+    // case COMBO_LCTL:
+    //   if (pressed) {
+    //     register_code(KC_LCTL);
+    //   } else {
+    //     unregister_code(KC_LCTL);
+    //   }
+    //   break;
+    // case COMBO_BCKSPC:
+    //   if (pressed) {
+    //     SEND_STRING(SS_TAP(X_BSPC));
+    //   }
+    //   break;
+    // case COMBO_FAST_BCKSPC:
+    //   if (pressed) {
+    //     register_code(KC_RCTL);
+    //     SEND_STRING(SS_TAP(X_BSPC));
+    //     unregister_code(KC_RCTL);
+    //   }
+    //   break;
+    // case COMBO_UNDERSCORE:
+    //   if (pressed) {
+    //     SEND_STRING("_");
+    //   }
+    //   break;
+    // case COMBO_DASH:
+    //   if (pressed) {
+    //     SEND_STRING("-");
+    //   }
+    //   break;
+    case COMBO_CAPS_WORD:
+      if (pressed) {
+        caps_word_on();
+      }
+      break;
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Layers
