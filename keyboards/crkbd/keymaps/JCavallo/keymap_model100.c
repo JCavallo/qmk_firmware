@@ -66,21 +66,23 @@ enum combo_events {
   COMBO_FAST_BCKSPC,
   COMBO_UNDERSCORE,
   COMBO_DASH,
+  COMBO_BACKTICK,
   COMBO_CAPS_WORD,
   COMBO_ESCAPE,
   COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
-const uint16_t PROGMEM compose_rshift[] = {KC_I, KC_E, COMBO_END};
-const uint16_t PROGMEM compose_lshift[] = {KC_R, KC_S, COMBO_END};
-const uint16_t PROGMEM compose_rctl[] = {KC_N, KC_E, COMBO_END};
-const uint16_t PROGMEM compose_lctl[] = {KC_T, KC_S, COMBO_END};
+const uint16_t PROGMEM compose_rshift[] = {KC_N, KC_E, COMBO_END};
+const uint16_t PROGMEM compose_lshift[] = {KC_T, KC_S, COMBO_END};
+const uint16_t PROGMEM compose_rctl[] = {KC_I, KC_E, COMBO_END};
+const uint16_t PROGMEM compose_lctl[] = {KC_R, KC_S, COMBO_END};
 const uint16_t PROGMEM compose_bckspc[] = {KC_U, KC_Y, COMBO_END};
 const uint16_t PROGMEM compose_fast_bckspc[] = {KC_QUOT, KC_Y, COMBO_END};
-const uint16_t PROGMEM underscore[] = {KC_E, KC_S, COMBO_END};
-const uint16_t PROGMEM dash[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM dash[] = {KC_E, KC_S, COMBO_END};
 const uint16_t PROGMEM escape[] = {KC_R, KC_I, COMBO_END};
+const uint16_t PROGMEM backtick[] = {KC_A, KC_O, COMBO_END};
 const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
 
 combo_t key_combos[] = {
@@ -92,6 +94,7 @@ combo_t key_combos[] = {
   [COMBO_FAST_BCKSPC] = COMBO(compose_fast_bckspc, RCTL(KC_BSPC)),
   [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
   [COMBO_DASH] = COMBO(dash, KC_MINS),
+  [COMBO_BACKTICK] = COMBO(backtick, KC_GRV),
   [COMBO_ESCAPE] = COMBO(escape, KC_ESC),
   [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
 };
