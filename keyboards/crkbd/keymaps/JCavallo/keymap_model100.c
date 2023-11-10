@@ -276,6 +276,7 @@ enum combo_events {
   COMBO_CAPS_WORD,
   COMBO_ESCAPE,
   COMBO_COMPOSE_E_ACUTE,
+  COMBO_COMPOSE_A_GRAVE,
   COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
@@ -294,6 +295,7 @@ const uint16_t PROGMEM escape[] = {KC_R, KC_I, COMBO_END};
 const uint16_t PROGMEM backtick[] = {KC_A, KC_O, COMBO_END};
 const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM compose_e_acute[] = {KC_N, KC_I, COMBO_END};
+const uint16_t PROGMEM compose_a_grave[] = {KC_R, KC_T, COMBO_END};
 
 combo_t key_combos[] = {
   [COMBO_RSHIFT] = COMBO(combo_rshift, OSM(MOD_RSFT)),
@@ -310,6 +312,7 @@ combo_t key_combos[] = {
   [COMBO_ESCAPE] = COMBO(escape, KC_ESC),
   [COMBO_CAPS_WORD] = COMBO_ACTION(caps_word),
   [COMBO_COMPOSE_E_ACUTE] = COMBO(compose_e_acute, COMPOSE_E_QUOTE),
+  [COMBO_COMPOSE_A_GRAVE] = COMBO(compose_a_grave, COMPOSE_A_GRAVE),
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
@@ -394,7 +397,7 @@ U_NU,              KC_F10,            KC_F7,             KC_F8,             KC_F
 // Left hand thumb left
 #define ACCENT_LAYER \
 U_NU,              COMPOSE_CAPS_A_GRAVE, LCTL(KC_C),     LCTL(KC_V),        LCTL(LSFT(KC_C)), LCTL(LSFT(KC_V)),   U_NU,              U_NU,              COMPOSE_U_GRAVE,   COMPOSE_U_CIRC,   U_NU,                U_NU, \
-U_NU,              COMPOSE_A_GRAVE,   COMPOSE_QUOTE,     COMPOSE_GRAVE,     COMPOSE_CIRC,     COMPOSE_TREMA,      U_NU,              COMPOSE_E_GRAVE,   COMPOSE_E_QUOTE,   COMPOSE_I_CIRC,   COMPOSE_O_CIRC,     U_NU, \
+U_NU,              /*COMPOSE_A_GRAVE*/U_NU,   COMPOSE_QUOTE,     COMPOSE_GRAVE,     COMPOSE_CIRC,     COMPOSE_TREMA,      U_NU,              COMPOSE_E_GRAVE,   /*COMPOSE_E_QUOTE*/U_NU,   COMPOSE_I_CIRC,   COMPOSE_O_CIRC,     U_NU, \
 U_NU,              U_NU,              U_NU,              COMPOSE_C_CEDILLE, COMPOSE_CAPS_C_CEDILLE, U_NU,         U_NU,              U_NU,              COMPOSE_E_CIRC,    U_NU,              U_NU,                U_NU, \
                                                          U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              KC_SLCK
 
