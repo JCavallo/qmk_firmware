@@ -266,6 +266,8 @@ enum combo_events {
   COMBO_LSHIFT,
   COMBO_RCTL,
   COMBO_LCTL,
+  COMBO_LSHIFT_CTRL,
+  COMBO_RSHIFT_CTRL,
   COMBO_BCKSPC,
   COMBO_FAST_BCKSPC,
   COMBO_UNDERSCORE,
@@ -282,6 +284,8 @@ const uint16_t PROGMEM combo_rshift[] = {KC_N, KC_E, COMBO_END};
 const uint16_t PROGMEM combo_lshift[] = {KC_T, KC_S, COMBO_END};
 const uint16_t PROGMEM combo_rctl[] = {KC_I, KC_E, COMBO_END};
 const uint16_t PROGMEM combo_lctl[] = {KC_R, KC_S, COMBO_END};
+const uint16_t PROGMEM combo_lshift_ctrl[] = {KC_N, KC_E, KC_I, COMBO_END};
+const uint16_t PROGMEM combo_rshift_ctrl[] = {KC_R, KC_S, KC_T, COMBO_END};
 const uint16_t PROGMEM combo_bckspc[] = {KC_U, KC_Y, COMBO_END};
 const uint16_t PROGMEM combo_fast_bckspc[] = {KC_QUOT, KC_Y, COMBO_END};
 const uint16_t PROGMEM underscore[] = {KC_T, KC_N, COMBO_END};
@@ -292,10 +296,12 @@ const uint16_t PROGMEM caps_word[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM compose_e_acute[] = {KC_N, KC_I, COMBO_END};
 
 combo_t key_combos[] = {
-  [COMBO_RSHIFT] = COMBO(combo_rshift, KC_LSFT),
-  [COMBO_LSHIFT] = COMBO(combo_lshift, KC_LSFT),
-  [COMBO_RCTL] = COMBO(combo_rctl, KC_LCTL),
-  [COMBO_LCTL] = COMBO(combo_lctl, KC_LCTL),
+  [COMBO_RSHIFT] = COMBO(combo_rshift, OSM(MOD_RSFT)),
+  [COMBO_LSHIFT] = COMBO(combo_lshift, OSM(MOD_LSFT)),
+  [COMBO_RCTL] = COMBO(combo_rctl, OSM(MOD_RCTL)),
+  [COMBO_LCTL] = COMBO(combo_lctl, OSM(MOD_LCTL)),
+  [COMBO_LSHIFT_CTRL] = COMBO(combo_lshift_ctrl, OSM(MOD_LCTL | MOD_LSFT)),
+  [COMBO_RSHIFT_CTRL] = COMBO(combo_rshift_ctrl, OSM(MOD_RCTL | MOD_RSFT)),
   [COMBO_BCKSPC] = COMBO(combo_bckspc, KC_BSPC),
   [COMBO_FAST_BCKSPC] = COMBO(combo_fast_bckspc, RCTL(KC_BSPC)),
   [COMBO_UNDERSCORE] = COMBO(underscore, KC_UNDS),
@@ -361,7 +367,7 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 // Base => Colemak DH
 #define ALPHA_LAYER \
 U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             KC_LEAD, \
-/*KC_ESC*/U_NU,            KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                U_NU, \
+TO(NUM),           KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                U_NU, \
 U_NU,              LGUI_T(KC_Z),      LALT_T(KC_X),      LCTL_T(KC_C),      LSFT_T(KC_D),      KC_V,              KC_K,              LSFT_T(KC_H),      LCTL_T(KC_COMM),   LALT_T(KC_DOT),    LGUI_T(KC_SLSH),     KC_MUTE_MIC, \
                                                          OSL(ACCENT),       KC_SPC,            LT(NAV, KC_TAB),   LT(FUN, KC_ENT),   LT(NUM, KC_BSPC),  OSL(SYM)
 // Right hand thumb left
@@ -374,7 +380,7 @@ U_NU,              KC_GRV,            KC_EXLM,           KC_AT,             KC_H
 // Right hand thumb middle
 #define NUMBER_LAYER \
 U_NU,              KC_LBRC,           KC_4,              KC_5,              KC_6,              KC_PLUS,           U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
-U_NU,              KC_0,              KC_1,              KC_2,              KC_3,              KC_DOT,            U_NA,              KC_LSFT,           KC_LCTL,           KC_LALT,           KC_LGUI,             U_NU, \
+TO(ALPHA),         KC_0,              KC_1,              KC_2,              KC_3,              KC_DOT,            U_NA,              KC_LSFT,           KC_LCTL,           KC_LALT,           KC_LGUI,             U_NU, \
 U_NU,              KC_COMM,           KC_7,              KC_8,              KC_9,              KC_EQL,            U_NA,              U_NA,              U_NA,              U_NA,              U_NA,                U_NU, \
                                                          U_NU,              U_NU,              U_NU,              U_NA,              U_NA,              U_NA
 
