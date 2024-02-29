@@ -370,9 +370,9 @@ void process_combo_event(uint16_t combo_index, bool pressed) {
 // Base => Colemak DH
 #define ALPHA_LAYER \
 U_NU,              KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,             KC_LEAD, \
-TO(NUM),           KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                U_NU, \
+TO(NUM),           KC_A,              KC_R,              KC_S,              KC_T,              KC_G,              KC_M,              KC_N,              KC_E,              KC_I,              KC_O,                TO(NAV), \
 U_NU,              LGUI_T(KC_Z),      LALT_T(KC_X),      LCTL_T(KC_C),      LSFT_T(KC_D),      KC_V,              KC_K,              LSFT_T(KC_H),      LCTL_T(KC_COMM),   LALT_T(KC_DOT),    LGUI_T(KC_SLSH),     KC_MUTE_MIC, \
-                                                         OSL(ACCENT),       KC_SPC,            LT(NAV, KC_TAB),   LT(FUN, KC_ENT),   LT(NUM, KC_BSPC),  OSL(SYM)
+                                                         OSL(ACCENT),       KC_SPC,            LT(NAV, KC_TAB),   LT(FUN, KC_ENT),   OSL(NUM),          OSL(SYM)
 // Right hand thumb left
 #define SYMBOL_LAYER \
 U_NU,              U_NA,              KC_AMPR,           KC_ASTR,           U_NA,              KC_PLUS,           KC_BSLS,           U_NA,              U_NA,              U_NA,              U_NA,                RESET, \
@@ -404,7 +404,7 @@ U_NU,              U_NU,              U_NU,              COMPOSE_C_CEDILLE, COMP
 // Left hand thumb middle
 #define NAVIGATION_LAYER \
 RESET,             U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_RDO,             KC_MUTE,           KC_VOLD,           KC_VOLU,           U_NU,                U_NU, \
-U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,           KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             U_NU, \
+U_NU,              KC_LGUI,           KC_LALT,           KC_LCTL,           KC_LSFT,           U_NA,              KC_CAPS,           KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,             TO(ALPHA), \
 U_NU,              U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              KC_INS,            KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,              U_NU, \
                                                          U_NA,              U_NA,              U_NA,              U_NU,              KC_DEL,              U_NU
 
